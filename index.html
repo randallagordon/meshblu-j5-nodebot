@@ -1,0 +1,50 @@
+<html>
+<head>
+  <script src="http://skynet.im/js/skynet.js"></script>
+  <script>
+    var uuid = "40af6231-5583-11e4-9f48-19535f670e40";
+    var devices = uuid;
+    var conn = skynet.createConnection({
+      "uuid": uuid,
+      "token": "vb7kmdfp4mv4pldib5cz3shjlv8l4n29"
+    });
+
+    conn.on('ready', function(data){
+      console.log('Ready');
+
+      conn.on('message', function(data){
+        console.log(data);
+      });
+
+      conn.status(function (data) {
+        console.log(data);
+      });
+
+      conn.message({
+        "devices": devices,
+        "payload": {
+          "hello":"world"
+        }
+      });
+
+      window.addEventListener("deviceorientation", function(e) {
+        var payload = {
+          gamma: e.gamma,
+          alpha: e.alpha,
+          beta: e.beta
+        };
+
+        conn.message({
+          "devices": devices,
+          "payload": payload
+        });
+      }, true);
+
+    });
+  </script>
+
+</head>
+<body>
+  Skynet.JS Demo
+</body>
+</html>
