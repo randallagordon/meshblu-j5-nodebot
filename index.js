@@ -9,7 +9,7 @@ var uuid = "40af6231-5583-11e4-9f48-19535f670e40";
 var token = "vb7kmdfp4mv4pldib5cz3shjlv8l4n29";
 
 // Setup johnny-five nodebot
-var board = new five.Board();
+var board = new five.Board({ port: process.argv[2] || undefined });
 var nodebot = null;
 
 board.on("ready", function () {
@@ -33,9 +33,10 @@ conn.on("ready", function(data){
   });
 
   conn.on("message", function(data){
-    if (data.gamma) {
-      var gamma = ( Math.abs( data.gamma ) > 45 ) ? 90 : data.gamma * 2;
-      var beta  = ( Math.abs( data.beta  ) > 45 ) ? 90 : data.beta  * 2;
+    var payload = data.payload;
+    if (payload.gamma) {
+      var gamma = ( Math.abs( payload.gamma ) > 45 ) ? 90 : payload.gamma * 2;
+      var beta  = ( Math.abs( payload.beta  ) > 45 ) ? 90 : payload.beta  * 2;
       nodebot.move( 90 + gamma + beta, 90 - gamma + beta );
     } else {
       console.log(data);
